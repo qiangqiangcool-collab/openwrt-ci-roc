@@ -5,14 +5,6 @@ on:
   push:
     branches:
       - srv06-ha-25.12
-    paths:
-      - .github/workflows/Build-OpenWrt.yml
-      - .github/workflows/Srv06-HomeAssistant-25.12.yml
-      - configs/Srv06.HomeAssistant.config
-      - configs/Srv06.HomeAssistant.General.config
-      - locks/srv06-ha-25.12.feeds.tsv
-      - scripts/Pin-feeds.sh
-      - scripts/Srv06-script.sh
 
 permissions:
   contents: read

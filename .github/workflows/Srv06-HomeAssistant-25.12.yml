@@ -1,0 +1,30 @@
+name: Srv06-HomeAssistant-25.12
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  Build:
+    uses: ./.github/workflows/Build-OpenWrt.yml
+    permissions:
+      contents: write
+      actions: write
+    with:
+      repo_url: https://github.com/laipeng668/immortalwrt.git
+      repo_branch: openwrt-25.12
+      repo_commit: 758d572f2c33ca850ca9f4de21904c212e0acdf1
+      config_file: configs/Srv06.HomeAssistant.config
+      general_config_file: configs/Srv06.HomeAssistant.General.config
+      diy_script: scripts/Srv06-script.sh
+      feed_lock_file: locks/srv06-ha-25.12.feeds.tsv
+      firmware_tag: Srv06-HA-25.12
+      kernel_file: kernel-6.12
+      artifact_prefix: Srv06.RE-CS-02.HomeAssistant.25.12
+      manifest_file: immortalwrt-qualcommax-ipq60xx.manifest
+      default_address: 192.168.1.1
+      release_summary: >-
+        点6 JDCloud RE-CS-02 专用有线固件；固定 ImmortalWrt 25.12 源码和全部 feeds，内置 Docker 29.6.1、Docker Compose、Dockerman、OpenClash、AdGuard Home、HAProxy、WoL、LACP/bonding 与 ext4 数据分区工具。Docker 首次启动保持禁用，并固定使用 /mnt/docker；确认独立数据分区正确挂载后才启用。

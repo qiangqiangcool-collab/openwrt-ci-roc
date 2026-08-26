@@ -73,3 +73,23 @@ fi
 exit 0
 EOF
 chmod 0755 files/etc/uci-defaults/99-srv06-docker-storage
+
+# The qualcommax target adds its wireless userspace and drivers as defaults.
+# Point6 is wired-only, so fail before the expensive compile if a future target
+# or config change selects any of them again.
+cat "$DEVICE_CONFIG_FILE" "$GENERAL_CONFIG_FILE" > .config
+make defconfig >/dev/null
+for forbidden_config in \
+  CONFIG_PACKAGE_wpad-openssl \
+  CONFIG_PACKAGE_hostapd-common \
+  CONFIG_PACKAGE_kmod-ath11k \
+  CONFIG_PACKAGE_kmod-ath11k-ahb \
+  CONFIG_PACKAGE_kmod-ath11k-pci \
+  CONFIG_PACKAGE_ath11k-firmware-ipq6018 \
+  CONFIG_PACKAGE_ath11k-firmware-qcn9074 \
+  CONFIG_PACKAGE_ipq-wifi-jdcloud_re-cs-02; do
+  if grep -Fqx "${forbidden_config}=y" .config; then
+    echo "Error: wired-only srv06 config unexpectedly enables $forbidden_config" >&2
+    exit 1
+  fi
+done
